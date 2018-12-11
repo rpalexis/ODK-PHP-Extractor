@@ -10,31 +10,31 @@ ini_set('display_errors', 1);
 require_once './ODKAggragateDataExtract.php';
 require_once  './ODKAggregateForm.php';
 
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json; charset=UTF-8");
+if(isset($_POST['action'])){
+    switch ($_POST['action']){
+        case 'get_form_list': {
+            //remoteSVR
+            //username
+            //password
+            if(isset($_POST['remoteSVR']) AND isset($_POST['username']) AND isset($_POST['password'])){
+                $odkLink = new ODKAggragateDataExtract($_POST['remoteSVR'],$_POST['username'],$_POST['password']);
+                $listOfForms = $odkLink->getFormsList();
+                unset($odkLink);
+                echo $listOfForms;
+            }else{
+                echo "Can't find the required parameter to retrive List of forms";
+            }
+            break;
+        }
 
-$testForm = new ODKAggregateForm('ME18_Enquete_Structure_CS_v13','ME18_Enquete_Structure_CS_v13','','','md5:df739fbc3af4e26776489f00fe032b2d','http://186.1.203.54:8079/ODKAggregate/formXml?formId=ME18_Enquete_Structure_CS_v13');
+        default :{
+            return json_encode(array(
+                'msg' => 'default behavior'
+            ));
+            break;
+        }
 
-$odkagg = new ODKAggragateDataExtract('http://pamsi.info:8079/ODKAggregate','vam_admin','V@madm!n02K');
-//echo  $odkagg->getFormsList();
-
-//echo $odkagg->getFormDefinition($testForm);
-//echo "<pre>";
-echo $odkagg->getFormDefinition($testForm);
-//var_dump(($odkagg->getFormDefinition($testForm)));
-//echo $odkagg->getTopElement($odkagg->getFormDefinition($testForm));
-//var_dump($odkagg->getTopElement($odkagg->getFormDefinition($testForm)));
-//echo "</pre>";
-//echo "<pre>";
-//var_dump(json_decode(json_encode($odkagg->getFormIdList($testForm)),true)['idList']['id']);
-//echo "</pre>";
-//echo $odkagg->getFormIdList($testForm);
-//echo json_decode(json_encode($xmlOBJ),true);
-
-
-//var_dump(json_decode(json_encode($xmlOBJ),true)['xform']);
-//var_dump());
-/*foreach ($xmlOBJ->attributes() as $t){
-    var_dump($t);
-}*/
-/*echo "<pre>";
-var_dump($odkagg->getFormsList());
-echo "</pre>";*/
+    }
+}

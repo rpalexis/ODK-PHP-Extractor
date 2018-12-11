@@ -3,6 +3,10 @@
 //require_once './vendor/guzzlehttp/guzzle/src/Client.php';
 require_once 'vendor/autoload.php';
 require_once './ODKAggregateForm.php';
+
+use GuzzleHttp\Client;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Handler\CurlHandler;
 class ODKAggragateDataExtract
 {
     private $ODKAggregateUrl;
@@ -12,6 +16,7 @@ class ODKAggragateDataExtract
     const GET_FORMLIST_URI = 'xformsList';
     const GET_FORMDEFINITION_URI = 'formXml';
     const GET_FORMIDLIST_URI = 'view/submissionList';
+    const GET_FORMDOWNLOAD_URI = 'view/downloadSubmission';
 
     public function __construct($ODKAggregateUrl,$username,$password)
     {
@@ -20,32 +25,64 @@ class ODKAggragateDataExtract
         $this->password = $password;
     }
 
+    public function createDigestString($username, $password, $uri){
+        $httpClient = new Client();
+        try{
+            $res = $httpClient->request('GET', $this->ODKAggregateUrl,array(
+                'headers' => array(
+                    'Authorization' => 'Digest realm=""'
+                )
+            ));
+        }catch (GuzzleHttp\Exception\ClientException $e){
+            $authResponse = $e->getResponse()->getHeader('WWW-Authenticate');
+            $authResponse = explode(',', preg_replace("/^Digest/i", "", $authResponse[0]));
+            $auth_pieces = array();
+            foreach ($authResponse as &$piece) {
+                $piece = trim($piece);
+                $piece = explode('=', $piece);
+                $auth_pieces[$piece[0]] = trim($piece[1], '"');
+            }
+            //building digest string
+            $nc = str_pad('1', 8, '9', STR_PAD_LEFT);
+            $cnonce = '0a4f113b';
+            $A1 = md5("{$username}:{$auth_pieces['realm']}:{$password}");
+            $A2 = md5("GET:".$uri);
+
+            $auth_pieces['response'] = md5("{$A1}:{$auth_pieces['nonce']}:{$nc}:{$cnonce}:{$auth_pieces['qop']}:${A2}");
+            $digest_header = "Digest username=\"{$username}\", realm=\"{$auth_pieces['realm']}\", nonce=\"{$auth_pieces['nonce']}\", uri=\"{$uri}\", cnonce=\"{$cnonce}\", nc={$nc}, qop=\"{$auth_pieces['qop']}\", response=\"{$auth_pieces['response']}\", opaque=\"\", algorithm=\"MD5\"";
+            return $digest_header;
+        }
+    }
     public function getFormsList(){
         $httpClient = new \GuzzleHttp\Client();
-        $res = $httpClient->request('GET', $this->ODKAggregateUrl.'/'.self::GET_FORMLIST_URI,array(
-            'auth'=> array(
-                $this->username,
-                $this->password,
-                'digest'
-            )
-        ));
-        $listOfFormsXML = simplexml_load_string($res->getBody()->getContents());
-        return json_encode(array(
-            "formList" => json_decode(json_encode($listOfFormsXML),true)['xform']
-        ));
+        try{
+            $res = $httpClient->request('GET', $this->ODKAggregateUrl.'/'.self::GET_FORMLIST_URI,array(
+                'headers' => array(
+                    'Authorization' => $this->createDigestString($this->username,$this->password, $this->ODKAggregateUrl.'/'.self::GET_FORMLIST_URI)
+                )
+            ));
+            $listOfFormsXML = simplexml_load_string($res->getBody()->getContents());
+            return json_encode(array(
+                "formList" => json_decode(json_encode($listOfFormsXML),true)['xform']
+            ));
+        }catch (GuzzleHttp\Exception\ConnectException $e){
+            return json_encode(array(
+               "error" => "Connection error",
+                "information" => "Can't connect to the ODK Aggregate Server! Please check your internet connection.",
+                "originalMessage"=>$e->getMessage()
+            ));
+        }
 
     }
 
     public function getFormDefinition(ODKAggregateForm $theForm){
         $httpClient = new \GuzzleHttp\Client();
         $res = $httpClient->request('GET', $this->ODKAggregateUrl.'/'.self::GET_FORMDEFINITION_URI,array(
-            'auth'=> array(
-                $this->username,
-                $this->password,
-                'digest'
-            ),
             'query'=>array(
                 'formId' =>$theForm->getFormID()
+            ),
+            'headers' => array(
+                'Authorization' => $this->createDigestString($this->username,$this->password,$this->ODKAggregateUrl.'/'.self::GET_FORMDEFINITION_URI)
             )
         ));
 
@@ -55,18 +92,13 @@ class ODKAggragateDataExtract
     public function getFormIdList(ODKAggregateForm $theForm){
         $httpClient = new \GuzzleHttp\Client();
         $res = $httpClient->request('GET', $this->ODKAggregateUrl.'/'.self::GET_FORMIDLIST_URI,array(
-            'auth'=> array(
-                $this->username,
-                $this->password,
-                'digest'
-            ),
             'query'=>array(
                 'formId' =>$theForm->getFormID(),
                 'numEntries'=> 100,
                 'cursor'=>''
             ),
             'headers' => array(
-                'Authorization' => 'Digest username="vam_admin", realm="odk_server ODK Aggregate", nonce="", uri="/ODKAggregate/view/submissionList", algorithm="MD5", response="2da45d44dde23b6e06e0f4b8755927a7"'
+                'Authorization' => $this->createDigestString($this->username,$this->password, $this->ODKAggregateUrl.'/'.self::GET_FORMIDLIST_URI)
             )
         ));
         $listOfFormIDSXML = simplexml_load_string($res->getBody()->getContents());
@@ -75,25 +107,33 @@ class ODKAggragateDataExtract
         ));
     }
 
-    public function getInstancesOfForm(ODKAggregateForm $theForm){
+
+    public function getInstancesOfForm(ODKAggregateForm $theForm, $uriID){
         $httpClient = new \GuzzleHttp\Client();
-        $res = $httpClient->request('GET', $this->ODKAggregateUrl.'/'.self::GET_FORMIDLIST_URI,array(
-            'auth'=> array(
-                $this->username,
-                $this->password,
-                'digest'
-            ),
-            'query'=>array(
-                'formId' =>$theForm->getFormID().'[@version='.((strlen($theForm->getVersion())==0) ? 'null' : $theForm->getVersion()).'and @uiVersion=null]/PROCSIMAST_V3_Bassi_Bleu_1_251118[@key=uuid:767ef9dc-d050-439b-a1b7-3778692529d8]'
-            ),
-            'headers' => array(
-                'Authorization' => 'Digest username="vam_admin", realm="odk_server ODK Aggregate", nonce="", uri="/ODKAggregate/view/submissionList", algorithm="MD5", response="2da45d44dde23b6e06e0f4b8755927a7"'
-            )
-        ));
+        try{
+//            echo $theForm->getFormID().'[@version='.((strlen($theForm->getVersion())==0) ? 'null' : $theForm->getVersion()).' and @uiVersion=null]/ME18_Enquete_Structure_CS_v13[@key=uuid:767ef9dc-d050-439b-a1b7-3778692529d8]';
+            $res = $httpClient->request('GET', $this->ODKAggregateUrl.'/'.self::GET_FORMDOWNLOAD_URI,array(
+                'query'=>array(
+                    'formId' =>$theForm->getFormID().'[@version='.((strlen($theForm->getVersion())==0) ? 'null' : $theForm->getVersion()).' and @uiVersion=null]/'.$this->getTopElement($this->getFormDefinition($theForm)).'[@key='.$uriID.']'
+                ),
+                'headers' => array(
+                    'Authorization' => $this->createDigestString($this->username,$this->password, $this->ODKAggregateUrl.'/'.self::GET_FORMDOWNLOAD_URI)
+                )
+            ));
+
+            return $res->getBody()->getContents();
+        }catch (GuzzleHttp\Exception\ClientException $e){
+//            echo $e->getResponse()->getBody()->getContents();
+        }catch (GuzzleHttp\Exception\ServerException $e){
+            echo $e->getResponse()->getBody()->getContents();
+        }
+
     }
 
     public function getTopElement($formDefnString){
-        return simplexml_load_string($formDefnString);
+        $xml = new DOMDocument();
+        $xml->loadXML($formDefnString);
+        return $xml->getElementsByTagName('instance')->item(0)->firstChild->nodeName;
     }
 
 
