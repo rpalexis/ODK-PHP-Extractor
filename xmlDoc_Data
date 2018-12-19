@@ -1,0 +1,193 @@
+<?xml version="1.0"?>
+<submission xmlns="http://opendatakit.org/submissions" xmlns:orx="http://openrosa.org/xforms">
+    <data>
+        <ME18_Enquete_Structure_CS_v13 id="ME18_Enquete_Structure_CS_v13" instanceID="uuid:6a4948e4-cef3-4df9-81a2-fe2db878d53e" submissionDate="2018-10-31T07:40:59.000-04" isComplete="true" markedAsCompleteDate="2018-10-31T07:40:59.000-04">
+            <group_vd3cv00>
+                <Date_et_heure_de_la_collecte>2018-10-30T12:00:00.000-04</Date_et_heure_de_la_collecte>
+                <Nom_de_l_agent>Moise Hedgens</Nom_de_l_agent>
+                <Qui_participe_la_visite>agent_de_suivi_pam</Qui_participe_la_visite>
+                <Specifiez_si_autre/>
+            </group_vd3cv00>
+            <group_hd4kd95>
+                <group_communaute>
+                    <Taille_de_la_localit>__1000_habitant</Taille_de_la_localit>
+                    <Donnez_plus_de_d_tai_ituation_si_possible/>
+                    <Niveau_socio_conomiq_servation_de_l_agent>pauvre</Niveau_socio_conomiq_servation_de_l_agent>
+                    <Specifiez_si_autre_002/>
+                    <Si_possible_prennez_des_inform>il_y_a_des_gens_disponible_com</Si_possible_prennez_des_inform>
+                </group_communaute>
+                <group_claudia>
+                    <Nom_interese>Arenord Pierre</Nom_interese>
+                    <Telephone_Interesse>32172859</Telephone_Interesse>
+                    <Fonction_Interesse>gardien</Fonction_Interesse>
+                    <Autre/>
+                </group_claudia>
+            </group_hd4kd95>
+            <group_xf7yp88>
+                <ecole>
+                    <Code_de_l_cole>PAM-2017-09-00099</Code_de_l_cole>
+                    <Nom_de_l_ecole>Ecole nationale  St jean baptiste caille epin</Nom_de_l_ecole>
+                    <Localit>Caille Epin</Localit>
+                    <Comment_vous_d_crive_ou_se_trouve_l_cole>rural</Comment_vous_d_crive_ou_se_trouve_l_cole>
+                </ecole>
+                <departement>centre</departement>
+                <commune>thomonde</commune>
+                <Section_Communale>1&#xE8;re_cabral</Section_Communale>
+                <group_mc4pz52>
+                    <Nom_du_Directeur>Yranord Jodeph</Nom_du_Directeur>
+                    <Sexe_du_Directeur>homme</Sexe_du_Directeur>
+                    <Num_ro_de_telephone_du_Directeur>42656290</Num_ro_de_telephone_du_Directeur>
+                    <Est_ce_que_l_cole_detien_une_a>oui__selon_le_directeur</Est_ce_que_l_cole_detien_une_a>
+                    <Code_MENFP/>
+                </group_mc4pz52>
+                <vacation>
+                    <Vacation_dispo>2_vaca</Vacation_dispo>
+                    <Vacation_ecole>AM</Vacation_ecole>
+                    <Si_le_batiment_a_d_a_roupes_que_vacations/>
+                </vacation>
+                <L_ecole_a_recu_d_autres_projet>non__jamais</L_ecole_a_recu_d_autres_projet>
+                <Access_Internet>une_connection une_connection_1</Access_Internet>
+                <group_ys62c69>
+                    <Accessibilit_d_cole>accessible_en_</Accessibilit_d_cole>
+                    <Temps_de_marche_depu_ccessible_en_voiture/>
+                    <Quel_est_le_bureau_P_lus_proche_de_l_cole>pap</Quel_est_le_bureau_P_lus_proche_de_l_cole>
+                    <A_combien_d_heures_l_ecole_de_ce_bureau>02:45</A_combien_d_heures_l_ecole_de_ce_bureau>
+                    <Distance_moyenne_pou_ez_avec_le_directeur>1__2_h_a_pied</Distance_moyenne_pou_ez_avec_le_directeur>
+                    <Est_ce_que_la_zone_d_autres_>non</Est_ce_que_la_zone_d_autres_>
+                    <Merci_de_sp_cifier_l_phone_nom_de_l_cole/>
+                </group_ys62c69>
+            </group_xf7yp88>
+            <L_ecole_collecte_une_contribut>oui</L_ecole_collecte_une_contribut>
+            <group_ol3go28>
+                <D_apr_s_le_directeur_comment_>une_fois_par_mois</D_apr_s_le_directeur_comment_>
+                <Specifiez_autre/>
+                <Combien_le_directeur_r_eleve_en_gourdes>300</Combien_le_directeur_r_eleve_en_gourdes>
+                <L_ann_e_dernier_la_c_ionner_reguli_rement>pas_assez_de_f</L_ann_e_dernier_la_c_ionner_reguli_rement>
+                <Combien_d_argent_l_e_e_dernier_gourdes/>
+                <Combien_d_argent_l_e_e_dernier_gourdes_001/>
+            </group_ol3go28>
+            <Comment_l_ecole_paye_donc_pour_la_cuisine/>
+            <group_qm96h02>
+                <Les_affiches_du_PAM_sont_visib>les_affiches_sont_pas_encore_l</Les_affiches_du_PAM_sont_visib>
+                <Si_les_affiches_ne_s_le_meilleur_endroit/>
+                <Si_les_affiches_ne_s_cuisine_ou_au_d_p_t/>
+            </group_qm96h02>
+            <group_fl0it19>
+                <group_rj2fc52>
+                    <B_timent_de_l_cole_Type_de_B_timent>batiment_stabl</B_timent_de_l_cole_Type_de_B_timent>
+                    <B_timent_de_l_cole_Etat_du_B>bon__tat</B_timent_de_l_cole_Etat_du_B>
+                    <B_timent_de_l_cole_Sol_du_B_timent>ciment_c_ramiq</B_timent_de_l_cole_Sol_du_B_timent>
+                    <B_timent_de_l_cole_Toit_du_B>bon__tat</B_timent_de_l_cole_Toit_du_B>
+                    <D_crivez_le_probleme_batiment_ou_le_toit/>
+                    <Installations_de_l_c_allations_disponible>cloture portail aire_de_jeux</Installations_de_l_c_allations_disponible>
+                    <Installations_de_l_cole_Sol_de_la_Cour>terre_battu</Installations_de_l_cole_Sol_de_la_Cour>
+                </group_rj2fc52>
+                <group_su49a35>
+                    <Etat_des_Salles_de_Classe>murs_s_par_s plusieurs_clas taille_adapt__ tableaux_dans_ bancs_et_chais</Etat_des_Salles_de_Classe>
+                    <Nombre_Salles_de_Classe>9</Nombre_Salles_de_Classe>
+                    <Nombre_d_enfants_par_de_classe_en_moyenne>30</Nombre_d_enfants_par_de_classe_en_moyenne>
+                    <Livres_Stylos_et_Ca_ers_pour_les_Enfants>quantit__limit_1</Livres_Stylos_et_Ca_ers_pour_les_Enfants>
+                </group_su49a35>
+                <C_Est_ce_que_l_cole_dispose_d>oui</C_Est_ce_que_l_cole_dispose_d>
+                <group_pu6gx15>
+                    <Latrine_Directeur_Professeur>0</Latrine_Directeur_Professeur>
+                    <Latrine_fille>4</Latrine_fille>
+                    <Latrine_garcon>4</Latrine_garcon>
+                    <Latrine_Mixte>0</Latrine_Mixte>
+                    <Combien_de_latrines_facilement_reparable>0</Combien_de_latrines_facilement_reparable>
+                    <Combien_de_latrines_onnel_mais_reparable>0</Combien_de_latrines_onnel_mais_reparable>
+                    <Combien_de_latrines_nel_et_non_reparable>0</Combien_de_latrines_nel_et_non_reparable>
+                </group_pu6gx15>
+                <group_du27k53>
+                    <Point_d_eau_Disponible_si_p>oui_et_fonctio</Point_d_eau_Disponible_si_p>
+                    <Point_d_eau_Emplacement>a_cot__de_la_c</Point_d_eau_Emplacement>
+                    <Quel_eau_boivent_les_enfants>autre_eau_non_</Quel_eau_boivent_les_enfants>
+                    <Eau_utilis_pour_la_cuisine>autre_eau_non_</Eau_utilis_pour_la_cuisine>
+                    <Eau_utilis_pour_le_lavage_des_mains>autre_eau_non_</Eau_utilis_pour_le_lavage_des_mains>
+                    <Lavage_des_mains_Savon>seau_de_lavage_main_avec_savon</Lavage_des_mains_Savon>
+                </group_du27k53>
+                <group_lb9wy13>
+                    <D_p_t_de_la_cantine_Disponib>depot_en_bon__tat___l_cole</D_p_t_de_la_cantine_Disponib>
+                    <Cette_site_est_fiabl_depot_de_la_cantine>non</Cette_site_est_fiabl_depot_de_la_cantine>
+                    <Si_l_entreposage_est_ourquoi_pas_l_cole/>
+                    <Depot_de_la_cantine_001_001>ciment_c_ramiq</Depot_de_la_cantine_001_001>
+                    <Depot_de_la_cantine_001>d_p_t_propre d_p_t_sans_ron porte_du_d_p_t suffisament_d_ palettes_ou_au balances_et_m_</Depot_de_la_cantine_001>
+                </group_lb9wy13>
+                <group_io1na17>
+                    <Endroit_de_cuisson>la_cuisine_est_fait_dans_une_s</Endroit_de_cuisson>
+                    <Si_un_espace_de_cuis_sons_des_cuisini_res/>
+                    <Cet_espace_a_une_che_pour_vacuer_l_air>oui</Cet_espace_a_une_che_pour_vacuer_l_air>
+                    <Cuisine_Sol>terre_battu</Cuisine_Sol>
+                    <Foyers_disponibles>feux_3_pierres</Foyers_disponibles>
+                    <S_il_y_a_un_foyer_expliquez_pourquoi/>
+                </group_io1na17>
+                <group_nk3ed16>
+                    <Assiettes_et_Couverts_Disponible>pas_suffisant__2</Assiettes_et_Couverts_Disponible>
+                    <Pour_combien_d_enfan_Couverts_additionels>150</Pour_combien_d_enfan_Couverts_additionels>
+                    <Assiettes_et_Couverts_Mat_riel>plastique metal</Assiettes_et_Couverts_Mat_riel>
+                    <Chaudieres_Disponible>suffisant</Chaudieres_Disponible>
+                </group_nk3ed16>
+                <group_jo1yw98>
+                    <Combien_de_cuisinieres_femmes_l_ecole>2</Combien_de_cuisinieres_femmes_l_ecole>
+                    <Combien_de_cuisinieres_hommes_l_ecole>0</Combien_de_cuisinieres_hommes_l_ecole>
+                    <Cuisini_res_Paiement>salaire_reguli</Cuisini_res_Paiement>
+                    <Combien_les_cuisinie_en_moyenne_par_mois>2500</Combien_les_cuisinie_en_moyenne_par_mois>
+                    <Cuisini_res_Organisation_du_Travail>les_memes_cuis</Cuisini_res_Organisation_du_Travail>
+                    <Expliquez_le_systeme_de_rotation/>
+                </group_jo1yw98>
+                <group_fh2wu82>
+                    <group_sf2nz79>
+                        <Le_Commit_de_Gestion_Cantine_>oui_selon_le_directeur_mais_il</Le_Commit_de_Gestion_Cantine_>
+                    </group_sf2nz79>
+                    <Collectez_tous_les_i_colaire_1_2_3_4_5_6/>
+                </group_fh2wu82>
+                <Si_une_cole_a_un_ef_augmenter_l_effectif/>
+                <_3ieme_cycle>non</_3ieme_cycle>
+                <group_sf2nb35>
+                    <_3ieme_cycle_Filles_Inscrits/>
+                    <_3ieme_cycle_Garcons_Inscrits/>
+                    <_3ieme_cycle_Filles_Presents/>
+                    <_3ieme_cycle_Garcons_Presents/>
+                </group_sf2nb35>
+                <Cahier_d_Appel>
+                    <Presence_et_Comprehension_du_C>un_cahier_d_appel_est_disponib les_professeurs_ont_bien_compr les_professeurs_utilisent_le_c</Presence_et_Comprehension_du_C>
+                    <Specifiez_combien_de_s_disponible_partout/>
+                    <Expliquez_pourquoi_l_as_compris_ou_utilis/>
+                </Cahier_d_Appel>
+                <group_kp65r95>
+                    <Ou_le_transporteur_livre_les_vivres>directement___</Ou_le_transporteur_livre_les_vivres>
+                    <Specifiez_si_Autre_001/>
+                    <Comment_est_organis_anutention_Qui_paye>Aide Communautaire</Comment_est_organis_anutention_Qui_paye>
+                    <La_premiere_livraison_est_bien>oui</La_premiere_livraison_est_bien>
+                    <Quel_etait_le_probleme_si_Non/>
+                    <Le_comptage_physique_est_possi>oui</Le_comptage_physique_est_possi>
+                </group_kp65r95>
+                <group_ks86v43>
+                    <Stock_Physique_C_r_al_kg>100.0000000000</Stock_Physique_C_r_al_kg>
+                    <Stock_Physique_L_gumineuses_kg>12.5000000000</Stock_Physique_L_gumineuses_kg>
+                    <Stock_Physique_Huile_kg>17.2900000000</Stock_Physique_Huile_kg>
+                    <Stock_Physique_Sel_kg>3.5700000000</Stock_Physique_Sel_kg>
+                </group_ks86v43>
+                <Nombre_de_jours_de_c_depuis_la_livraison>29</Nombre_de_jours_de_c_depuis_la_livraison>
+            </group_fl0it19>
+            <group_kq4oq77>
+                <Rangement_des_Outils_de_Gestion>toutes_les_out</Rangement_des_Outils_de_Gestion>
+                <Cahier_de_Gestion_de_Stock>le_directeur_a le_directeur_a_1 le_directeur_u</Cahier_de_Gestion_de_Stock>
+                <Cahier_de_Presence_Hebdomadair>le_directeur_a le_directeur_a_1 le_directeur_u</Cahier_de_Presence_Hebdomadair>
+                <Cahier_de_Comptabilit>cahier_gestion_disponible</Cahier_de_Comptabilit>
+                <Cahier_de_Comptabilit_001>le_cahier_n_est_pas_disponible</Cahier_de_Comptabilit_001>
+                <Cahier_de_Comptabilit_001_001>les_rapports_mensuels_ne_sont_</Cahier_de_Comptabilit_001_001>
+                <Specifiez_ce_que_le_lise_pas_les_Cahiers/>
+                <Expliquez_au_Directe_rend_bien_les_outils/>
+                <Le_Directeur_a_une_Calculatrice>oui</Le_Directeur_a_une_Calculatrice>
+            </group_kq4oq77>
+            <Remerciez_le_directe_gratuite_par_Digicel/>
+            <GPS_de_l_ecole>18.9858806830 -72.0145474292 -625.6964379335 20.0000000000</GPS_de_l_ecole>
+            <__version__>vksgigofstUGbGLRr2tnzG</__version__>
+            <_version_>v3KSHZf9XFYDHGjuzCtBUE</_version_>
+            <orx:meta>
+                <orx:instanceID>uuid:6a4948e4-cef3-4df9-81a2-fe2db878d53e</orx:instanceID>
+            </orx:meta>
+        </ME18_Enquete_Structure_CS_v13>
+    </data>
+</submission>

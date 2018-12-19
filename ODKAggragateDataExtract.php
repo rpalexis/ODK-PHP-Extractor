@@ -58,13 +58,17 @@ class ODKAggragateDataExtract
         try{
             $res = $httpClient->request('GET', $this->ODKAggregateUrl.'/'.self::GET_FORMLIST_URI,array(
                 'headers' => array(
-                    'Authorization' => $this->createDigestString($this->username,$this->password, $this->ODKAggregateUrl.'/'.self::GET_FORMLIST_URI)
+                    'Authorization' => $this->createDigestString($this->username,$this->password,'/ODKAggregate/'.self::GET_FORMLIST_URI)
                 )
             ));
             $listOfFormsXML = simplexml_load_string($res->getBody()->getContents());
             return json_encode(array(
                 "formList" => json_decode(json_encode($listOfFormsXML),true)['xform']
             ));
+        }catch (GuzzleHttp\Exception\ClientException $e){
+            echo $e->getResponse()->getBody()->getContents();
+            echo $e->getRequest()->getBody()->getContents();
+            var_dump($e->getRequest()->getHeaders());
         }catch (GuzzleHttp\Exception\ConnectException $e){
             return json_encode(array(
                "error" => "Connection error",
@@ -82,7 +86,7 @@ class ODKAggragateDataExtract
                 'formId' =>$theForm->getFormID()
             ),
             'headers' => array(
-                'Authorization' => $this->createDigestString($this->username,$this->password,$this->ODKAggregateUrl.'/'.self::GET_FORMDEFINITION_URI)
+                'Authorization' => $this->createDigestString($this->username,$this->password,'/ODKAggregate/'.self::GET_FORMDEFINITION_URI)
             )
         ));
 
@@ -98,7 +102,7 @@ class ODKAggragateDataExtract
                 'cursor'=>''
             ),
             'headers' => array(
-                'Authorization' => $this->createDigestString($this->username,$this->password, $this->ODKAggregateUrl.'/'.self::GET_FORMIDLIST_URI)
+                'Authorization' => $this->createDigestString($this->username,$this->password, '/ODKAggregate/'.self::GET_FORMIDLIST_URI)
             )
         ));
         $listOfFormIDSXML = simplexml_load_string($res->getBody()->getContents());
@@ -117,7 +121,7 @@ class ODKAggragateDataExtract
                     'formId' =>$theForm->getFormID().'[@version='.((strlen($theForm->getVersion())==0) ? 'null' : $theForm->getVersion()).' and @uiVersion=null]/'.$this->getTopElement($this->getFormDefinition($theForm)).'[@key='.$uriID.']'
                 ),
                 'headers' => array(
-                    'Authorization' => $this->createDigestString($this->username,$this->password, $this->ODKAggregateUrl.'/'.self::GET_FORMDOWNLOAD_URI)
+                    'Authorization' => $this->createDigestString($this->username,$this->password, '/ODKAggregate/'.self::GET_FORMDOWNLOAD_URI)
                 )
             ));
 
@@ -133,7 +137,7 @@ class ODKAggragateDataExtract
     public function getTopElement($formDefnString){
         $xml = new DOMDocument();
         $xml->loadXML($formDefnString);
-        return $xml->getElementsByTagName('instance')->item(0)->firstChild->nodeName;
+        return ($xml->getElementsByTagName('instance')->item(0)->firstChild->nodeName == 'data' ? 'data' : $xml->getElementsByTagName('instance')->item(0)->firstChild->nodeName);
     }
 
 
