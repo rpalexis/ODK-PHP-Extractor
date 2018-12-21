@@ -43,7 +43,7 @@ if(isset($_POST['action'])){
             if(isset($_POST['remoteSVR']) AND isset($_POST['username']) AND isset($_POST['password']) AND isset($_POST['formID']) AND isset($_POST['name']) AND isset($_POST['majorMinorVersion']) AND isset($_POST['version']) AND isset($_POST['password']) AND isset($_POST['hash'])){
                 $odkLink = new ODKAggragateDataExtract($_POST['remoteSVR'],$_POST['username'],$_POST['password']);
                 $formsInfo = new ODKAggregateForm($_POST['formID'],$_POST['name'],$_POST['majorMinorVersion'],$_POST['version'],$_POST['hash'],$_POST['downloadUrl']);
-                $formMSG = $odkLink->getFormDefinition($formsInfo);
+                $formMSG = $odkLink->getFormDefinitionToJSON($formsInfo);
                 unset($odkLink);
                 unset($formsInfo);
                 echo $formMSG;
@@ -71,6 +71,30 @@ if(isset($_POST['action'])){
                 echo $formsIDs;
             }else{
                 echo "Can't find the required parameter to retrive the form's ids list";
+            }
+            break;
+        }
+
+        case 'get_form_data_for_one_id': {
+            //remoteSVR
+            //username
+            //password
+            //formID
+            //name
+            //majorMinorVersion
+            //version
+            //hash
+            //downloadUrl
+            //uiid
+            if(isset($_POST['remoteSVR']) AND isset($_POST['username']) AND isset($_POST['password']) AND isset($_POST['formID']) AND isset($_POST['name']) AND isset($_POST['majorMinorVersion']) AND isset($_POST['version']) AND isset($_POST['password']) AND isset($_POST['hash']) AND isset($_POST['uuid'])){
+                $odkLink = new ODKAggragateDataExtract($_POST['remoteSVR'],$_POST['username'],$_POST['password']);
+                $formsInfo = new ODKAggregateForm($_POST['formID'],$_POST['name'],$_POST['majorMinorVersion'],$_POST['version'],$_POST['hash'],$_POST['downloadUrl']);
+                $formMSG = $odkLink->getFormInstanceValueToJSON($formsInfo,$_POST['uuid']);
+                unset($odkLink);
+                unset($formsInfo);
+                echo $formMSG;
+            }else{
+                echo "Can't find the required parameter to retrive the form's definition in get_form_data_for_one_id";
             }
             break;
         }

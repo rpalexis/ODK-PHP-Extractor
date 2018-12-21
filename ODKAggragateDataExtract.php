@@ -89,8 +89,93 @@ class ODKAggragateDataExtract
                 'Authorization' => $this->createDigestString($this->username,$this->password,'/ODKAggregate/'.self::GET_FORMDEFINITION_URI)
             )
         ));
-
         return $res->getBody()->getContents();
+    }
+
+    public function getFormDefinitionToJSON(ODKAggregateForm $theForm){
+        $formDef = $this->getFormDefinition($theForm);
+        $xmlDoc = new DOMDocument();
+        $xmlDoc->loadXML($formDef);
+//        $topElementVal = $this->getTopElement($formDef);
+        $allBind = $xmlDoc->getElementsByTagName('bind');
+//        var_dump($allBind);exit;
+
+//        $allQ = array($topElementVal =>array());
+        $allQ = array();
+        $questionsFromBind = array();
+
+        foreach ($allBind as $bb){
+            $questionsFromBind[] =  substr($bb->getAttribute("nodeset"),1);
+        }
+
+        foreach ($questionsFromBind as $qString){
+            $exPath = explode('/',$qString);
+            $curArray = array();
+            $flag = '';
+            $selectorString = '';
+            foreach ($exPath as $onePath){
+                $selectorString .="['".$onePath."']";
+                $select = "$"."curManip = &$"."allQ".$selectorString.";";
+                eval($select);
+                if(isset($curManip)){
+                    $curArray = $curManip;
+                }else{
+                    $curArray[] = array($onePath => array());
+                }
+
+            }
+        }
+
+        $allQ['data_path'] = $questionsFromBind;
+        return json_encode($allQ);
+    }
+    
+    public function getFormInstanceValueToJSON($theForm, $uiid){
+        $formDef = $this->getFormDefinition($theForm);
+        $xmlDoc = new DOMDocument();
+        $xmlDoc->loadXML($formDef);
+        $allBind = $xmlDoc->getElementsByTagName('bind');
+
+        $xmlDoc_Data = new DOMDocument();
+        $xmlDoc_Data->loadXML($this->getInstancesOfForm($theForm,$uiid));
+        $xpath = new DOMXPath($xmlDoc_Data);
+        $xpath->registerNamespace('zx', 'http://opendatakit.org/submissions');
+
+//        $allQ = array();
+        $allQ = json_decode($this->getFormDefinitionToJSON($theForm),true);
+
+        $questionsFromBind = array();
+
+        foreach ($allBind as $bb){
+            $questionsFromBind[] =  substr($bb->getAttribute("nodeset"),1);
+        }
+        foreach ($questionsFromBind as $qString){
+            $exPath = explode('/',$qString);
+            $selectorString = '';
+            foreach ($exPath as $path){
+                $selectorString .= "['".$path."']";
+            }
+            $qryPath = '';
+            foreach($exPath as $thPath){
+                $qryPath .= 'zx:'.$thPath.'/';
+            }
+
+            $select = "$"."rowData = &$"."allQ".$selectorString.";";
+//            echo $select."<br />";
+            eval($select);
+
+            if(is_null($rowData)){
+                $tt =  '//'.$qryPath;
+                $tt = rtrim($tt,'/');
+                if($xpath->query($tt)->length > 0){
+                    $rowData = $xpath->query($tt)->item(0)->nodeValue;
+                }else{
+
+                }
+            }
+        }
+
+        return json_encode($allQ);
     }
 
     public function getFormIdList(ODKAggregateForm $theForm){
@@ -118,13 +203,12 @@ class ODKAggragateDataExtract
 //            echo $theForm->getFormID().'[@version='.((strlen($theForm->getVersion())==0) ? 'null' : $theForm->getVersion()).' and @uiVersion=null]/ME18_Enquete_Structure_CS_v13[@key=uuid:767ef9dc-d050-439b-a1b7-3778692529d8]';
             $res = $httpClient->request('GET', $this->ODKAggregateUrl.'/'.self::GET_FORMDOWNLOAD_URI,array(
                 'query'=>array(
-                    'formId' =>$theForm->getFormID().'[@version='.((strlen($theForm->getVersion())==0) ? 'null' : $theForm->getVersion()).' and @uiVersion=null]/'.$this->getTopElement($this->getFormDefinition($theForm)).'[@key='.$uriID.']'
+                    'formId' =>$theForm->getFormID().'[@version='.((strlen($theForm->getVersion())==0) ? 'null' : $theForm->getVersion()).' and @uiVersion=null]/'.$this->getTopElement($theForm,$this->getFormDefinition($theForm)).'[@key='.$uriID.']'
                 ),
                 'headers' => array(
                     'Authorization' => $this->createDigestString($this->username,$this->password, '/ODKAggregate/'.self::GET_FORMDOWNLOAD_URI)
                 )
             ));
-
             return $res->getBody()->getContents();
         }catch (GuzzleHttp\Exception\ClientException $e){
 //            echo $e->getResponse()->getBody()->getContents();
@@ -134,10 +218,12 @@ class ODKAggragateDataExtract
 
     }
 
-    public function getTopElement($formDefnString){
+    public function getTopElement(ODKAggregateForm $theForm,$formDefnString){
         $xml = new DOMDocument();
         $xml->loadXML($formDefnString);
-        return ($xml->getElementsByTagName('instance')->item(0)->firstChild->nodeName == 'data' ? 'data' : $xml->getElementsByTagName('instance')->item(0)->firstChild->nodeName);
+        $xpath = new DOMXPath($xml);
+        $xpath->registerNamespace('zx', 'http://www.w3.org/2002/xforms');
+        return ($xpath->query("//zx:*[@id='".$theForm->getFormID()."']")->item(0)->tagName == 'data' ? 'data' : $xpath->query("//zx:*[@id='".$theForm->getFormID()."']")->item(0)->tagName);
     }
 
 
