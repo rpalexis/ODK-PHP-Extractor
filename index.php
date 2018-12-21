@@ -74,7 +74,6 @@ if(isset($_POST['action'])){
             }
             break;
         }
-
         case 'get_form_data_for_one_id': {
             //remoteSVR
             //username
@@ -98,7 +97,6 @@ if(isset($_POST['action'])){
             }
             break;
         }
-
         case 'get_all_data_for_form': {
             //remoteSVR
             //username
@@ -122,7 +120,6 @@ if(isset($_POST['action'])){
             }
             break;
         }
-
         default :{
             return json_encode(array(
                 'msg' => 'default behavior'
@@ -131,4 +128,6 @@ if(isset($_POST['action'])){
         }
 
     }
+}else{
+    echo "No action defined! Remember this extractor only accept POST request";
 }
