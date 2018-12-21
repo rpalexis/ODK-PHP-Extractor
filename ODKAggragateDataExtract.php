@@ -96,11 +96,8 @@ class ODKAggragateDataExtract
         $formDef = $this->getFormDefinition($theForm);
         $xmlDoc = new DOMDocument();
         $xmlDoc->loadXML($formDef);
-//        $topElementVal = $this->getTopElement($formDef);
-        $allBind = $xmlDoc->getElementsByTagName('bind');
-//        var_dump($allBind);exit;
 
-//        $allQ = array($topElementVal =>array());
+        $allBind = $xmlDoc->getElementsByTagName('bind');
         $allQ = array();
         $questionsFromBind = array();
 
