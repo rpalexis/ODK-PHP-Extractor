@@ -223,6 +223,18 @@ class ODKAggragateDataExtract
         return ($xpath->query("//zx:*[@id='".$theForm->getFormID()."']")->item(0)->tagName == 'data' ? 'data' : $xpath->query("//zx:*[@id='".$theForm->getFormID()."']")->item(0)->tagName);
     }
 
+    public function getAllFormDataToJSON(ODKAggregateForm $theForm){
+        $listOfIds = json_decode($this->getFormIdList($theForm),true)['formIdsList'];
+
+        $formInstances = array();
+        foreach ($listOfIds as $oneId){
+            $formInstances [] = json_decode($this->getFormInstanceValueToJSON($theForm, $oneId),true);
+        }
+
+        return json_encode($formInstances);
+
+    }
+
 
     public function __toString()
     {

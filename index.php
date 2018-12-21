@@ -99,6 +99,30 @@ if(isset($_POST['action'])){
             break;
         }
 
+        case 'get_all_data_for_form': {
+            //remoteSVR
+            //username
+            //password
+            //formID
+            //name
+            //majorMinorVersion
+            //version
+            //hash
+            //downloadUrl
+            //uiid
+            if(isset($_POST['remoteSVR']) AND isset($_POST['username']) AND isset($_POST['password']) AND isset($_POST['formID']) AND isset($_POST['name']) AND isset($_POST['majorMinorVersion']) AND isset($_POST['version']) AND isset($_POST['password']) AND isset($_POST['hash'])){
+                $odkLink = new ODKAggragateDataExtract($_POST['remoteSVR'],$_POST['username'],$_POST['password']);
+                $formsInfo = new ODKAggregateForm($_POST['formID'],$_POST['name'],$_POST['majorMinorVersion'],$_POST['version'],$_POST['hash'],$_POST['downloadUrl']);
+                $formMSG = $odkLink->getAllFormDataToJSON($formsInfo);
+                unset($odkLink);
+                unset($formsInfo);
+                echo $formMSG;
+            }else{
+                echo "Can't find the required parameter to retrive the form's definition in get_form_data_for_one_id";
+            }
+            break;
+        }
+
         default :{
             return json_encode(array(
                 'msg' => 'default behavior'
