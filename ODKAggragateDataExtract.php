@@ -227,9 +227,14 @@ class ODKAggragateDataExtract
         $listOfIds = json_decode($this->getFormIdList($theForm),true)['formIdsList'];
 
         $formInstances = array();
-        foreach ($listOfIds as $oneId){
-            $formInstances [] = json_decode($this->getFormInstanceValueToJSON($theForm, $oneId),true);
+        if(is_array($listOfIds)){
+            foreach ($listOfIds as $oneId){
+                $formInstances [] = json_decode($this->getFormInstanceValueToJSON($theForm, $oneId),true);
+            }
+        }else{
+            $formInstances [] =  json_decode($this->getFormInstanceValueToJSON($theForm, $listOfIds),true);
         }
+
 
         return json_encode($formInstances);
 
