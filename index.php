@@ -15,6 +15,7 @@ header("Content-Type: application/json; charset=UTF-8",true);
 
 
 if(isset($_POST['action'])){
+    ini_set('max_execution_time', 300);
     switch ($_POST['action']){
         case 'get_form_list': {
             //remoteSVR
@@ -128,6 +129,7 @@ if(isset($_POST['action'])){
         }
 
     }
+    ini_set('max_execution_time', 30);
 }else{
     echo "No action defined! Remember this extractor only accept POST request";
 }
