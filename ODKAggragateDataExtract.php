@@ -53,6 +53,7 @@ class ODKAggragateDataExtract
             return $digest_header;
         }
     }
+
     public function getFormsList(){
         $httpClient = new \GuzzleHttp\Client();
         try{
@@ -100,10 +101,20 @@ class ODKAggragateDataExtract
         $allBind = $xmlDoc->getElementsByTagName('bind');
         $allQ = array();
         $questionsFromBind = array();
+        $parentNodeName = explode("/",substr($allBind->item(0)->getAttribute("nodeset"),1))[0];
+//        $xmlDoc_Data->loadXML($this->getInstancesOfForm($theForm,$uiid));
+        $uiidValue = $xmlDoc->getElementsByTagName($parentNodeName)->item(0)->getAttribute("instanceID");
+        $submissionDate = $xmlDoc->getElementsByTagName($parentNodeName)->item(0)->getAttribute("submissionDate");
+        $isComplete = $xmlDoc->getElementsByTagName($parentNodeName)->item(0)->getAttribute("isComplete");
+        $markedAsCompleteDate = $xmlDoc->getElementsByTagName($parentNodeName)->item(0)->getAttribute("markedAsCompleteDate");
 
         foreach ($allBind as $bb){
             $questionsFromBind[] =  substr($bb->getAttribute("nodeset"),1);
         }
+
+        $questionsFromBind[] = $parentNodeName."/meta/submissionDate";
+        $questionsFromBind[] = $parentNodeName."/meta/isComplete";
+        $questionsFromBind[] = $parentNodeName."/meta/markedAsCompleteDate";
 
         foreach ($questionsFromBind as $qString){
             $exPath = explode('/',$qString);
@@ -133,19 +144,34 @@ class ODKAggragateDataExtract
         $xmlDoc->loadXML($formDef);
         $allBind = $xmlDoc->getElementsByTagName('bind');
 
+        $parentNodeName = explode("/",substr($allBind->item(0)->getAttribute("nodeset"),1))[0];
+
         $xmlDoc_Data = new DOMDocument();
+//var_dump($this->getInstancesOfForm($theForm,$uiid));exit;
         $xmlDoc_Data->loadXML($this->getInstancesOfForm($theForm,$uiid));
+        $uiidValue = $xmlDoc_Data->getElementsByTagName($parentNodeName)->item(0)->getAttribute("instanceID");
+        $submissionDate = $xmlDoc_Data->getElementsByTagName($parentNodeName)->item(0)->getAttribute("submissionDate");
+        $isComplete = $xmlDoc_Data->getElementsByTagName($parentNodeName)->item(0)->getAttribute("isComplete");
+        $markedAsCompleteDate = $xmlDoc_Data->getElementsByTagName($parentNodeName)->item(0)->getAttribute("markedAsCompleteDate");
+
         $xpath = new DOMXPath($xmlDoc_Data);
         $xpath->registerNamespace('zx', 'http://opendatakit.org/submissions');
 
 //        $allQ = array();
         $allQ = json_decode($this->getFormDefinitionToJSON($theForm),true);
 
+//        var_dump($xmlDoc_Data);
         $questionsFromBind = array();
 
         foreach ($allBind as $bb){
             $questionsFromBind[] =  substr($bb->getAttribute("nodeset"),1);
         }
+        $questionsFromBind[] = $parentNodeName."/meta/submissionDate";
+        $questionsFromBind[] = $parentNodeName."/meta/isComplete";
+        $questionsFromBind[] = $parentNodeName."/meta/markedAsCompleteDate";
+
+        $allQ["data_path"] = $questionsFromBind;
+
         foreach ($questionsFromBind as $qString){
             $exPath = explode('/',$qString);
             $selectorString = '';
@@ -166,12 +192,37 @@ class ODKAggragateDataExtract
                 $tt = rtrim($tt,'/');
                 if($xpath->query($tt)->length > 0){
                     $rowData = $xpath->query($tt)->item(0)->nodeValue;
+
                 }else{
+                    switch ($exPath[count($exPath)-1]){
+                        case "instanceID" : {
+                            $rowData = $uiidValue;
+                            break;
+                        }
+
+                        case "submissionDate" : {
+                            $rowData = $submissionDate;
+                            break;
+                        }
+
+                        case "isComplete" : {
+                            $rowData = ($isComplete == "true" ? "Oui" : "Non");
+                            break;
+                        }
+
+                        case "markedAsCompleteDate" : {
+                            $rowData = $markedAsCompleteDate;
+                            break;
+                        }
+                    }
 
                 }
             }
         }
-
+        $allQ['uiid'] = $uiidValue;
+        $allQ['submissionDate'] = $submissionDate;
+        $allQ['isComplete'] = $isComplete;
+        $allQ['markedAsCompleteDate'] = $markedAsCompleteDate;
         return json_encode($allQ);
     }
 
@@ -180,19 +231,19 @@ class ODKAggragateDataExtract
         $res = $httpClient->request('GET', $this->ODKAggregateUrl.'/'.self::GET_FORMIDLIST_URI,array(
             'query'=>array(
                 'formId' =>$theForm->getFormID(),
-                'numEntries'=> 100,
+                'numEntries'=> 10000000,
                 'cursor'=>''
             ),
             'headers' => array(
                 'Authorization' => $this->createDigestString($this->username,$this->password, '/ODKAggregate/'.self::GET_FORMIDLIST_URI)
             )
         ));
+
         $listOfFormIDSXML = simplexml_load_string($res->getBody()->getContents());
         return json_encode(array(
             "formIdsList" => json_decode(json_encode($listOfFormIDSXML),true)['idList']['id']
         ));
     }
-
 
     public function getInstancesOfForm(ODKAggregateForm $theForm, $uriID){
         $httpClient = new \GuzzleHttp\Client();
